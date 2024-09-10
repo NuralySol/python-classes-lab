@@ -67,3 +67,44 @@ class Game:
     def switch_player(self):
         self.current_player = self.player_o if self.current_player == self.player_x else self.player_x
         
+
+    def get_move(self):
+        while True:
+            move = input(f"f{self.current_player.name}, enter your move e.g A1 or B2 please refert to the output: ").upper()
+            
+            if len(move) != 2 or move[0] not in 'ABC' or move[1] not in '123':
+                print('invalid input. Please enter in the format A1, B2, etc.')
+                continue
+            
+            col = ord(move[0]) - ord('A')
+            row = int(move[1]) - 1
+            
+            if self.board.make_move(row, col, self.current_player.symbol):
+                break
+    
+    def check_winner_or_tie(self):
+        if self.board.is_winner(self.current_player.symbol):
+            self.board.print_board()
+            print(f"Congratulations {self.current_player.name}, you won!")
+            return True
+        
+        if self.board.is_full():
+            self.board.print_board()
+            print("It's a Tie!")
+            return True
+        
+        return False
+    
+    def play_game(self):
+        print("Welcome to Tic-tac-toe game!")
+        
+        while True:
+            self.board.print_board()
+            self.get_move()
+            if self.check_winner_or_tie():
+                break
+            self.switch_player()
+            
+if __name__ == "__main__":
+    game = Game()
+    game.play_game()
